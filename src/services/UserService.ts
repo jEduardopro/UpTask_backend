@@ -61,8 +61,18 @@ const confirmUserAccount = async (token: string) => {
 	await user.save()
 }
 
+const sendEmailToResetPassword = async (email: string) => {
+	const userExists = await UserModel.findOne({ email })
+	if (!userExists) {
+		throw new UserNotFound()
+	}
+	userExists.token = generateID()
+	await userExists.save()
+}
+
 export {
 	registerUser,
 	authenticateUser,
-	confirmUserAccount
+	confirmUserAccount,
+	sendEmailToResetPassword
 }

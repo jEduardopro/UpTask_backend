@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { authenticateUser, confirmUserAccount, registerUser } from "../services/UserService"
+import { authenticateUser, confirmUserAccount, registerUser, sendEmailToResetPassword } from "../services/UserService"
 import { asyncHandler } from "../utils/async.handler"
 
 const register = asyncHandler(async (req: Request, res: Response) => {
@@ -20,8 +20,17 @@ const confirm = asyncHandler(async (req: Request, res: Response) => {
 	})
 })
 
+const forgotPassword = asyncHandler(async (req: Request, res: Response) => {
+	const { email } = req.body
+	await sendEmailToResetPassword(email)
+	res.json({
+		message: 'Password reset email sent'
+	})
+})
+
 export {
 	register,
 	signIn,
-	confirm
+	confirm,
+	forgotPassword
 }
