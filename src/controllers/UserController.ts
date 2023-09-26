@@ -7,6 +7,11 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 	res.json(user)
 })
 
+const signIn = asyncHandler(async (req: Request, res: Response) => {
+
+})
+
 export {
-	register
+	register,
+	signIn
 }

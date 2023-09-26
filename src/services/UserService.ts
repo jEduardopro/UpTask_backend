@@ -1,6 +1,7 @@
 import { User } from "../types"
 import UserModel from '../models/User'
 import EmailTaken from "../errors/EmailTaken"
+import generateID from "../utils/generateId"
 
 const registerUser = async (user: User) => {
 	const { email } = user
@@ -10,12 +11,15 @@ const registerUser = async (user: User) => {
 		throw new EmailTaken()
 	}
 
-	const newUser = await new UserModel(user).save()
+	const newUser = new UserModel(user)
+	newUser.token = generateID()
+	const userSaved = await newUser.save()
+
 	return {
-		name: newUser.name,
-		email: newUser.email,
-		confirmed_at: newUser.confirmed_at,
-		token: newUser.token
+		name: userSaved.name,
+		email: userSaved.email,
+		confirmed_at: userSaved.confirmed_at,
+		token: userSaved.token
 	}
 }
 
