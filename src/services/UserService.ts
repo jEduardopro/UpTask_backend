@@ -1,6 +1,6 @@
 import { User } from "../types"
+import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials} from "../errors"
 import UserModel from '../models/User'
-import EmailTaken from "../errors/EmailTaken"
 import generateID from "../utils/generateId"
 
 const registerUser = async (user: User) => {
@@ -23,6 +23,33 @@ const registerUser = async (user: User) => {
 	}
 }
 
+const authenticateUser = async (user: User) => {
+	const userExists = await UserModel.findOne({ email: user.email })
+	if (!userExists) {
+		throw new UserNotFound()
+	}
+
+	if (!userExists.confirmed_at) {
+		throw new AccountNotConfirmed()
+	}
+
+	const isPasswordValid = await userExists.checkPassword(user.password)
+	console.log('isPasswordValid', isPasswordValid);
+	
+	if (!isPasswordValid) {
+		throw new InvalidCredentials()
+	}
+
+	return {
+		name: userExists.name,
+		email: userExists.email,
+		confirmed_at: userExists.confirmed_at,
+		token: userExists.token
+	}
+
+}
+
 export {
-	registerUser
+	registerUser,
+	authenticateUser
 }

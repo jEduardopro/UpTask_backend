@@ -1,7 +1,8 @@
-import mongoose from 'mongoose'
+import mongoose, { Schema } from 'mongoose'
 import bcrypt from 'bcrypt'
+import { IUserDoc } from '../types'
 
-const UserSchema = new mongoose.Schema({
+const UserSchema: Schema<IUserDoc> = new mongoose.Schema({
 	name: {
 		type: String,
 		required: true,
@@ -10,7 +11,6 @@ const UserSchema = new mongoose.Schema({
 	password: {
 		type: String,
 		required: true,
-		select: false,
 		trim: true
 	},
 	email: {
@@ -40,4 +40,8 @@ UserSchema.pre('save', async function (next) {
 	this.password = await bcrypt.hash(this.password, salt)
 })
 
-export default mongoose.model('User', UserSchema)
+UserSchema.methods.checkPassword = async function (password: string) {
+	return await bcrypt.compare(password, this.password)
+}
+
+export default mongoose.model<IUserDoc>('User', UserSchema)

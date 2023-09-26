@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { registerUser } from "../services/UserService"
+import { authenticateUser, registerUser } from "../services/UserService"
 import { asyncHandler } from "../utils/async.handler"
 
 const register = asyncHandler(async (req: Request, res: Response) => {
@@ -8,7 +8,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 })
 
 const signIn = asyncHandler(async (req: Request, res: Response) => {
-
+	const user = await authenticateUser(req.body)
 })
 
 export {
