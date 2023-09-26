@@ -2,6 +2,7 @@ import { User } from "../types"
 import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials} from "../errors"
 import UserModel from '../models/User'
 import generateID from "../utils/generateId"
+import generateJWT from "../utils/jwt.handler"
 
 const registerUser = async (user: User) => {
 	const { email } = user
@@ -44,7 +45,7 @@ const authenticateUser = async (user: User) => {
 		name: userExists.name,
 		email: userExists.email,
 		confirmed_at: userExists.confirmed_at,
-		token: userExists.token
+		token: generateJWT(userExists.id)
 	}
 
 }

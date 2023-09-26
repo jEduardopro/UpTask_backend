@@ -9,6 +9,7 @@ const register = asyncHandler(async (req: Request, res: Response) => {
 
 const signIn = asyncHandler(async (req: Request, res: Response) => {
 	const user = await authenticateUser(req.body)
+	res.json(user)
 })
 
 export {
