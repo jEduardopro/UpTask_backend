@@ -4,6 +4,7 @@ import {
 	validateTokenToResetPassword, updatePassword
 } from "../services/UserService"
 import { asyncHandler } from "../utils/async.handler"
+import { AuthReq } from "../types"
 
 const register = asyncHandler(async (req: Request, res: Response) => {
 	const user = await registerUser(req.body)
@@ -48,11 +49,16 @@ const resetPassword = asyncHandler(async (req: Request, res: Response) => {
 	})
 })
 
+const profile = asyncHandler(async (req: AuthReq, res: Response) => {
+	res.json(req.user)
+})
+
 export {
 	register,
 	signIn,
 	confirm,
 	forgotPassword,
 	validateToken,
-	resetPassword
+	resetPassword,
+	profile
 }

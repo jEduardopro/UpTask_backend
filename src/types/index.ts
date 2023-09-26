@@ -1,4 +1,11 @@
+import { Request } from 'express';
+import { AuthUser } from './User';
+
 export * from './User'
+
+export interface AuthReq extends Request {
+  user?: AuthUser;
+}
 
 export enum HttpStatusCode {
 	OK = 200,
