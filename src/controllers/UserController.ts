@@ -1,5 +1,5 @@
 import { Request, Response } from "express"
-import { authenticateUser, registerUser } from "../services/UserService"
+import { authenticateUser, confirmUserAccount, registerUser } from "../services/UserService"
 import { asyncHandler } from "../utils/async.handler"
 
 const register = asyncHandler(async (req: Request, res: Response) => {
@@ -12,7 +12,16 @@ const signIn = asyncHandler(async (req: Request, res: Response) => {
 	res.json(user)
 })
 
+const confirm = asyncHandler(async (req: Request, res: Response) => {
+	const token = req.params.token
+	await confirmUserAccount(token)
+	res.json({
+		message: 'Account confirmed successfully'
+	})
+})
+
 export {
 	register,
-	signIn
+	signIn,
+	confirm
 }

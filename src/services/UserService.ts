@@ -1,5 +1,5 @@
 import { User } from "../types"
-import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials} from "../errors"
+import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials, InvalidToken} from "../errors"
 import UserModel from '../models/User'
 import generateID from "../utils/generateId"
 import generateJWT from "../utils/jwt.handler"
@@ -50,7 +50,19 @@ const authenticateUser = async (user: User) => {
 
 }
 
+const confirmUserAccount = async (token: string) => {
+	const user = await UserModel.findOne({ token })
+	if (!user) {
+		throw new InvalidToken()
+	}
+
+	user.confirmed_at = new Date()
+	user.token = ''
+	await user.save()
+}
+
 export {
 	registerUser,
-	authenticateUser
+	authenticateUser,
+	confirmUserAccount
 }
