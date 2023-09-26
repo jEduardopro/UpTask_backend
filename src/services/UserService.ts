@@ -70,9 +70,26 @@ const sendEmailToResetPassword = async (email: string) => {
 	await userExists.save()
 }
 
+const validateTokenToResetPassword = async (token: string) => {
+	const user = await UserModel.findOne({ token })
+	if (!user) {
+		throw new InvalidToken()
+	}
+	return user
+}
+
+const updatePassword = async (token:string, password: string) => { 
+	const user = await validateTokenToResetPassword(token)
+	user.password = password
+	user.token = ''
+	await user.save()
+}
+
 export {
 	registerUser,
 	authenticateUser,
 	confirmUserAccount,
-	sendEmailToResetPassword
+	sendEmailToResetPassword,
+	validateTokenToResetPassword,
+	updatePassword
 }
