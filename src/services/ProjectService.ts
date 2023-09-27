@@ -29,8 +29,28 @@ const findProject = async (req: AuthReq) => {
 	return project
 }
 
+const updateProject = async (req: AuthReq) => {
+	const project = await findProject(req)
+
+	project.name = req.body.name || project.name
+	project.description = req.body.description || project.description
+	project.deadline = req.body.deadline || project.deadline
+	project.client = req.body.client || project.client
+
+	await project.save()
+
+	return project
+}
+
+const destroyProject = async (req: AuthReq) => {
+	const project = await findProject(req)
+	await project.deleteOne()
+}
+
 export {
 	getProjectList,
 	createProject,
-	findProject
+	findProject,
+	updateProject,
+	destroyProject
 }
