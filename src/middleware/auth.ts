@@ -5,9 +5,7 @@ import { AuthReq, HttpStatusCode } from "../types";
 
 const auth = async (req: AuthReq, res: Response, next: NextFunction) => {
 	const authorization = req.headers.authorization
-	if (!authorization || !authorization.startsWith('Bearer')) {
-		console.log('authorization: ', authorization);
-		
+	if (!authorization || !authorization.startsWith('Bearer')) {		
 		return res.status(HttpStatusCode.UNAUTHORIZED).json({
 			message: 'Unauthorized'
 		})
@@ -29,14 +27,13 @@ const auth = async (req: AuthReq, res: Response, next: NextFunction) => {
 		})
 	}
 
-	const user = await User.findById(decoded.id).select("-password -confirmed_at -updatedAt -createdAt -__v")
+	const user = await User.findById(decoded.id).select("-password -confirmed_at -token -updatedAt -createdAt -__v")
 	if (!user) {
 		return res.status(HttpStatusCode.UNAUTHORIZED).json({
 			message: 'Unauthorized'
 		})
 	}
-	req.user = { id: user.id, name: user.name, email: user.email}
-	console.log('req.user: ', req.user);
+	req.user = { id: user.id, name: user.name, email: user.email}	
 	next()
 }
 

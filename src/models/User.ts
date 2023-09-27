@@ -44,4 +44,4 @@ UserSchema.methods.checkPassword = async function (password: string) {
 	return await bcrypt.compare(password, this.password)
 }
 
-export default mongoose.model<IUserDoc>('User', UserSchema)
+export default mongoose.model('User', UserSchema)
