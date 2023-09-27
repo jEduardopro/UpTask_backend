@@ -1,10 +1,11 @@
 import { Request, Response } from "express";
 import { asyncHandler } from "../utils/async.handler";
-import { createProject } from "../services/ProjectService";
+import { getProjectList, createProject, findProject } from "../services/ProjectService";
 
 
 const getProjects = asyncHandler(async (req: Request, res: Response) => {
-
+	const projects = await getProjectList(req)
+	res.json(projects)
 })
 
 const create = asyncHandler(async (req: Request, res: Response) => {
@@ -13,7 +14,8 @@ const create = asyncHandler(async (req: Request, res: Response) => {
 })
 
 const getProject = asyncHandler(async (req: Request, res: Response) => {
-
+	const project = await findProject(req)
+	res.json(project)
 })
 
 const editProject = asyncHandler(async (req: Request, res: Response) => {

@@ -31,6 +31,7 @@ const ProjectSchema = new mongoose.Schema({
 		}
 	]
 }, {
+	versionKey: false,
 	timestamps: true
 })
 

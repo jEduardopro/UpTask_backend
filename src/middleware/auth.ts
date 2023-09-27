@@ -27,7 +27,7 @@ const auth = async (req: AuthReq, res: Response, next: NextFunction) => {
 		})
 	}
 
-	const user = await User.findById(decoded.id).select("-password -confirmed_at -token -updatedAt -createdAt -__v")
+	const user = await User.findById(decoded.id).select("-password -confirmed_at -token -updatedAt -createdAt")
 	if (!user) {
 		return res.status(HttpStatusCode.UNAUTHORIZED).json({
 			message: 'Unauthorized'
