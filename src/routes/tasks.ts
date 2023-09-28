@@ -1,18 +1,21 @@
 import express from 'express'
 import {
-	createTask,
+	create,
 	getTask,
 	updateTask,
 	deleteTask,
 	changeStatus
 } from '../controllers/TaskController'
 import auth from '../middleware/auth'
+import checkId from '../middleware/checkId'
 
 const router = express.Router()
 
-router.post('/', auth, createTask)
+router.post('/', auth, create)
 
-router.use(auth).route('/:id')
+router
+	.route('/:id')
+	.all(auth, checkId)
 	.get(getTask)
 	.put(updateTask)
 	.delete(deleteTask)

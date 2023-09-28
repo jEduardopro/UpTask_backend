@@ -2,6 +2,8 @@ import { Request } from 'express';
 import { AuthUser } from './User';
 
 export * from './User'
+export * from './Project'
+export * from './Task'
 
 export interface AuthReq extends Request {
   user?: AuthUser;

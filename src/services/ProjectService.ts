@@ -1,7 +1,7 @@
 import { AuthReq } from "../types"
 import ProjectModel from '../models/Project'
 import { Types } from 'mongoose'
-import { ProjectNotFound } from "../errors/ProjectNotFound"
+import { ProjectNotFound } from "../errors"
 
 const getProjectList = async (req: AuthReq) => {
 	const projects = await ProjectModel.find().where('creator').equals(req.user.id)

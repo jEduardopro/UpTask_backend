@@ -1,20 +1,32 @@
 import { Response } from "express"
 import { AuthReq } from "../types"
+import {createTask, findTask} from '../services/TaskService'
+import { asyncHandler } from "../utils/async.handler"
 
-const createTask = async (req: AuthReq, res: Response) => { 
+const create = asyncHandler(async (req: AuthReq, res: Response) => {
+	const task = await createTask(req)
+	res.status(201).json({ task })
+})
 
-}
+const getTask = asyncHandler(async (req: AuthReq, res: Response) => {
+	const task = await findTask(req)
+	res.json(task)
+})
 
-const getTask = async (req: AuthReq, res: Response) => { }
+const updateTask = asyncHandler(async (req: AuthReq, res: Response) => {
 
-const updateTask = async (req: AuthReq, res: Response) => { }
+})
 
-const deleteTask = async (req: AuthReq, res: Response) => { }
+const deleteTask = asyncHandler(async (req: AuthReq, res: Response) => {
 
-const changeStatus = async (req: AuthReq, res: Response) => { }
+})
+
+const changeStatus = asyncHandler(async (req: AuthReq, res: Response) => {
+
+})
 
 export {
-	createTask,
+	create,
 	getTask,
 	updateTask,
 	deleteTask,
