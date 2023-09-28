@@ -2,7 +2,7 @@ import express from 'express'
 import {
 	create,
 	getTask,
-	updateTask,
+	update,
 	deleteTask,
 	changeStatus
 } from '../controllers/TaskController'
@@ -17,7 +17,7 @@ router
 	.route('/:id')
 	.all(auth, checkId)
 	.get(getTask)
-	.put(updateTask)
+	.put(update)
 	.delete(deleteTask)
 
 router.post('/:id/change-status', auth, changeStatus)

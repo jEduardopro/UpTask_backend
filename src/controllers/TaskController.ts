@@ -1,6 +1,6 @@
 import { Response } from "express"
 import { AuthReq } from "../types"
-import {createTask, findTask} from '../services/TaskService'
+import {createTask, destroyTask, findTask, updateTask} from '../services/TaskService'
 import { asyncHandler } from "../utils/async.handler"
 
 const create = asyncHandler(async (req: AuthReq, res: Response) => {
@@ -13,12 +13,14 @@ const getTask = asyncHandler(async (req: AuthReq, res: Response) => {
 	res.json(task)
 })
 
-const updateTask = asyncHandler(async (req: AuthReq, res: Response) => {
-
+const update = asyncHandler(async (req: AuthReq, res: Response) => {
+	const task = await updateTask(req)
+	res.json(task)
 })
 
 const deleteTask = asyncHandler(async (req: AuthReq, res: Response) => {
-
+	await destroyTask(req)
+	res.json({ message: 'Task deleted' })
 })
 
 const changeStatus = asyncHandler(async (req: AuthReq, res: Response) => {
@@ -28,7 +30,7 @@ const changeStatus = asyncHandler(async (req: AuthReq, res: Response) => {
 export {
 	create,
 	getTask,
-	updateTask,
+	update,
 	deleteTask,
 	changeStatus
 }

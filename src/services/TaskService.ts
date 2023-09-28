@@ -40,7 +40,29 @@ const findTask = async (req: AuthReq) => {
 	return task
 }
 
+const updateTask = async (req: AuthReq) => {
+	const task = await findTask(req)
+
+	task.name = req.body.name || task.name
+	task.description = req.body.description || task.description
+	task.priority = req.body.priority || task.priority
+	task.deadline = req.body.deadline || task.deadline
+
+	await task.save()
+
+	task.depopulate('project')
+
+	return task
+}
+
+const destroyTask = async (req: AuthReq) => {
+	const task = await findTask(req)
+	await task.deleteOne()
+}
+
 export {
 	createTask,
-	findTask
+	findTask,
+	updateTask,
+	destroyTask
 }
