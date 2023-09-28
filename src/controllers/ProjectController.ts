@@ -38,10 +38,6 @@ const removeCollaborator = asyncHandler(async (req: Request, res: Response) => {
 
 })
 
-const getTasks = asyncHandler(async (req: Request, res: Response) => {
-
-})
-
 export {
 	getProjects,
 	create,
@@ -49,7 +45,6 @@ export {
 	editProject,
 	deleteProject,
 	addCollaborator,
-	removeCollaborator,
-	getTasks
+	removeCollaborator
 }
 

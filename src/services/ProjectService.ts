@@ -1,7 +1,8 @@
-import { AuthReq } from "../types"
 import ProjectModel from '../models/Project'
-import { Types } from 'mongoose'
+import Task from "../models/Task"
+import { AuthReq } from "../types"
 import { ProjectNotFound } from "../errors"
+import { Types } from 'mongoose'
 
 const getProjectList = async (req: AuthReq) => {
 	const projects = await ProjectModel.find().where('creator').equals(req.user.id)
@@ -15,7 +16,7 @@ const createProject = async (req: AuthReq) => {
 	return project
 }
 
-const findProject = async (req: AuthReq) => {
+const projectExist = async (req: AuthReq) => {
 	const project = await ProjectModel.findById(req.params.id)
 
 	if (!project) {
@@ -29,8 +30,19 @@ const findProject = async (req: AuthReq) => {
 	return project
 }
 
+const findProject = async (req: AuthReq) => {
+	const project = await projectExist(req)
+
+	const tasks = await Task.find().where('project').equals(project.id)
+
+	return {
+		project,
+		tasks
+	}
+}
+
 const updateProject = async (req: AuthReq) => {
-	const project = await findProject(req)
+	const project = await projectExist(req)
 
 	project.name = req.body.name || project.name
 	project.description = req.body.description || project.description
@@ -43,7 +55,7 @@ const updateProject = async (req: AuthReq) => {
 }
 
 const destroyProject = async (req: AuthReq) => {
-	const project = await findProject(req)
+	const project = await projectExist(req)
 	await project.deleteOne()
 }
 
