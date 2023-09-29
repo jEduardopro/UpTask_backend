@@ -7,8 +7,8 @@ import { asyncHandler } from "../utils/async.handler"
 import { AuthReq } from "../types"
 
 const register = asyncHandler(async (req: Request, res: Response) => {
-	const user = await registerUser(req.body)
-	res.json(user)
+	await registerUser(req.body)
+	res.json({message: 'User registered successfully, please check your email to confirm your account'})
 })
 
 const signIn = asyncHandler(async (req: Request, res: Response) => {
