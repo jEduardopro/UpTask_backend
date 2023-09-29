@@ -3,7 +3,7 @@ import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials, Inval
 import UserModel from '../models/User'
 import generateID from "../utils/generateId"
 import generateJWT from "../utils/jwt.handler"
-import { confirmAccount } from "./EmailService"
+import { confirmAccount, resetPassword } from "./EmailService"
 
 const registerUser = async (user: User) => {
 	const { email } = user
@@ -71,6 +71,7 @@ const sendEmailToResetPassword = async (email: string) => {
 	}
 	userExists.token = generateID()
 	await userExists.save()
+	resetPassword(userExists)
 }
 
 const validateTokenToResetPassword = async (token: string) => {

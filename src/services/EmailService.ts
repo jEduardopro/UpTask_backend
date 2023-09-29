@@ -4,7 +4,6 @@ import { readFileSync } from 'fs'
 import { join } from 'path'
 
 const confirmAccount = async (user: User) => {
-
 	const { name, email, token } = user
 	
 	const htmlTemplate = readFileSync(join(__dirname, '../emails/confirm-account.html'), 'utf8')
@@ -28,6 +27,31 @@ const confirmAccount = async (user: User) => {
 	})
 }
 
+const resetPassword = async (user: User) => {
+	const { name, email, token } = user
+	
+	const htmlTemplate = readFileSync(join(__dirname, '../emails/reset-password.html'), 'utf8')
+	const variablesToReplace = [
+		{name: '[name]', value: name},
+		{name: '[url]', value: `${process.env.FRONTEND_URL}/forgot-password/${token}`}
+	]
+
+	let html = htmlTemplate
+
+	variablesToReplace.forEach(variable => {
+		html = html.replace(variable.name, variable.value)
+	})	
+
+	await mail.sendMail({
+		from: '"UpTask - Manager of Projects" <no-reply@uptask.com>',
+		to: email,
+		subject: 'UpTask - Reset your password',
+		text: 'Reset your password',
+		html: html
+	})
+}
+
 export {
-	confirmAccount
+	confirmAccount,
+	resetPassword
 }
