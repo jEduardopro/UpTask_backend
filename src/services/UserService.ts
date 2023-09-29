@@ -3,6 +3,7 @@ import {EmailTaken, UserNotFound, AccountNotConfirmed, InvalidCredentials, Inval
 import UserModel from '../models/User'
 import generateID from "../utils/generateId"
 import generateJWT from "../utils/jwt.handler"
+import { confirmAccount } from "./EmailService"
 
 const registerUser = async (user: User) => {
 	const { email } = user
@@ -15,6 +16,8 @@ const registerUser = async (user: User) => {
 	const newUser = new UserModel(user)
 	newUser.token = generateID()
 	const userSaved = await newUser.save()
+
+	confirmAccount(userSaved)
 
 	return {
 		name: userSaved.name,
