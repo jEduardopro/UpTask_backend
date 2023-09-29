@@ -38,7 +38,6 @@ const authenticateUser = async (user: User) => {
 	}
 
 	const isPasswordValid = await userExists.checkPassword(user.password)
-	console.log('isPasswordValid', isPasswordValid);
 	
 	if (!isPasswordValid) {
 		throw new InvalidCredentials()
