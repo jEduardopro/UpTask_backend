@@ -32,13 +32,8 @@ const projectExist = async (req: AuthReq) => {
 
 const findProject = async (req: AuthReq) => {
 	const project = await projectExist(req)
-
-	const tasks = await Task.find().where('project').equals(project.id)
-
-	return {
-		project,
-		tasks
-	}
+	
+	return project
 }
 
 const updateProject = async (req: AuthReq) => {
