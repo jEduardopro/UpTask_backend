@@ -44,9 +44,9 @@ const authenticateUser = async (user: User) => {
 	}
 
 	return {
+		id: userExists.id,
 		name: userExists.name,
 		email: userExists.email,
-		confirmed_at: userExists.confirmed_at,
 		token: generateJWT(userExists.id)
 	}
 
