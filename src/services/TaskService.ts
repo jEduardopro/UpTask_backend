@@ -21,7 +21,10 @@ const createTask = async (req: AuthReq) => {
 		throw new ProjectNotFound()
 	}
 
-	const task = Task.create(req.body)
+	const task = await Task.create(req.body)
+	projectExist.tasks.push(task._id)
+	await projectExist.save()
+
 	return task
 }
 
