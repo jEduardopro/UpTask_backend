@@ -5,7 +5,7 @@ import { asyncHandler } from "../utils/async.handler"
 
 const create = asyncHandler(async (req: AuthReq, res: Response) => {
 	const task = await createTask(req)
-	res.status(201).json({ task })
+	res.json(task)
 })
 
 const getTask = asyncHandler(async (req: AuthReq, res: Response) => {

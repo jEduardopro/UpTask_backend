@@ -32,7 +32,7 @@ const projectExist = async (req: AuthReq) => {
 
 const findProject = async (req: AuthReq) => {
 	const project = await projectExist(req)
-	
+	await project.populate('tasks')
 	return project
 }
 
