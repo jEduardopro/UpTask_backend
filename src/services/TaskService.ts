@@ -63,7 +63,13 @@ const updateTask = async (req: AuthReq) => {
 
 const destroyTask = async (req: AuthReq) => {
 	const task = await findTask(req)
-	await task.deleteOne()
+	const project = await ProjectModel.findById(task.project)
+	project.tasks = project.tasks.filter(t => t.toString() !== task._id.toString())
+
+	await Promise.allSettled([
+		project.save(),
+		task.deleteOne()
+	])
 }
 
 const updateTaskStatus = async (req: AuthReq) => {
