@@ -1,7 +1,7 @@
 import ProjectModel from '../models/Project'
 import { AuthReq } from "../types"
 import { ProjectNotFound } from "../errors"
-import { Types } from 'mongoose'
+import { Types } from 'mongoose';
 import {findUserByEmail} from './UserService'
 
 const getProjectList = async (req: AuthReq) => {
@@ -33,6 +33,7 @@ const projectExist = async (req: AuthReq) => {
 const findProject = async (req: AuthReq) => {
 	const project = await projectExist(req)
 	await project.populate('tasks')
+	await project.populate('collaborators', 'name email')
 	return project
 }
 
@@ -73,11 +74,19 @@ const addCollaboratorToProject = async (req: AuthReq) => {
 	
 }
 
+const deleteCollaboratorFromProject = async (req: AuthReq) => {
+	const project = await projectExist(req)
+
+	project.collaborators = project.collaborators.filter(collaborator => collaborator.toString() !== req.params.collaboratorId)
+	await project.save()
+}
+
 export {
 	getProjectList,
 	createProject,
 	findProject,
 	updateProject,
 	destroyProject,
-	addCollaboratorToProject
+	addCollaboratorToProject,
+	deleteCollaboratorFromProject
 }

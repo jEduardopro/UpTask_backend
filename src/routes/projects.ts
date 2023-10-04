@@ -22,6 +22,6 @@ router.use(auth)
 	.delete('/:id', checkId, deleteProject)
 	.post('/collaborators', searchCollaborator)
 	.post('/:id/collaborators', addCollaborator)
-	.delete('/:id/remove-collaborator', removeCollaborator)
+	.delete('/:id/remove-collaborator/:collaboratorId', removeCollaborator)
 
 export default router
