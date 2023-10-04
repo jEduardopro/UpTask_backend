@@ -5,7 +5,14 @@ import { Types } from 'mongoose';
 import {findUserByEmail} from './UserService'
 
 const getProjectList = async (req: AuthReq) => {
-	const projects = await ProjectModel.find().where('creator').equals(req.user.id)
+	const projects = await ProjectModel.find(
+		{
+			$or: [
+				{ 'collaborators': { $in: req.user.id } },
+				{ 'creator': { $in: req.user.id } }
+			]
+		}
+	)
 	return projects
 }
 
@@ -23,7 +30,10 @@ const projectExist = async (req: AuthReq) => {
 		throw new ProjectNotFound()
 	}
 
-	if (project.creator.toString() !== req.user.id) {
+	if (
+		project.creator.toString() !== req.user.id &&
+		!project.collaborators.some(coll => coll.toString() === req.user.id)
+	) {
 		throw new ProjectNotFound()
 	}
 

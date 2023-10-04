@@ -36,7 +36,10 @@ const findTask = async (req: AuthReq) => {
 		throw new TaskNotFound()		
 	}		
 	
-	if (task.project.creator.toString() !== req.user.id) {
+	if (
+		task.project.creator.toString() !== req.user.id &&
+		!task.project.collaborators.some(coll => coll.toString() === req.user.id)
+	) {
 		throw new ProjectNotFound()
 	}
 
@@ -63,9 +66,17 @@ const destroyTask = async (req: AuthReq) => {
 	await task.deleteOne()
 }
 
+const updateTaskStatus = async (req: AuthReq) => {
+	const task = await findTask(req)
+	task.status = !task.status
+	await task.save()
+	return task
+}
+
 export {
 	createTask,
 	findTask,
 	updateTask,
-	destroyTask
+	destroyTask,
+	updateTaskStatus
 }
