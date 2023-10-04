@@ -5,6 +5,7 @@ import {
 	getProject,
 	editProject,
 	deleteProject,
+	searchCollaborator,
 	addCollaborator,
 	removeCollaborator
 } from '../controllers/ProjectController'
@@ -19,6 +20,7 @@ router.use(auth)
 	.get('/:id', checkId, getProject)
 	.put('/:id', checkId, editProject)
 	.delete('/:id', checkId, deleteProject)
+	.post('/collaborators', searchCollaborator)
 	.post('/:id/collaborators', addCollaborator)
 	.delete('/:id/remove-collaborator', removeCollaborator)
 

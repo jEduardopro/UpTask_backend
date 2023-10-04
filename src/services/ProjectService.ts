@@ -1,8 +1,8 @@
 import ProjectModel from '../models/Project'
-import Task from "../models/Task"
 import { AuthReq } from "../types"
 import { ProjectNotFound } from "../errors"
 import { Types } from 'mongoose'
+import {findUserByEmail} from './UserService'
 
 const getProjectList = async (req: AuthReq) => {
 	const projects = await ProjectModel.find().where('creator').equals(req.user.id)
@@ -54,10 +54,30 @@ const destroyProject = async (req: AuthReq) => {
 	await project.deleteOne()
 }
 
+const addCollaboratorToProject = async (req: AuthReq) => {
+	const project = await projectExist(req)
+	
+	const { email } = req.body
+	const user = await findUserByEmail(email)
+
+	if (project.creator.toString() === user.id) {
+		throw new Error('You cannot add yourself as a collaborator')
+	}
+
+	if (project.collaborators.includes(user.id)) {
+		throw new Error('The user is already a collaborator')
+	}
+		
+	project.collaborators.push(user.id)
+	await project.save()
+	
+}
+
 export {
 	getProjectList,
 	createProject,
 	findProject,
 	updateProject,
-	destroyProject
+	destroyProject,
+	addCollaboratorToProject
 }

@@ -88,11 +88,22 @@ const updatePassword = async (token:string, password: string) => {
 	await user.save()
 }
 
+const findUserByEmail = async (email: string) => {
+	const user = await UserModel.findOne({ email }).select('-password -updatedAt -createdAt -token')
+
+	if (!user) {
+		throw new UserNotFound()
+	}
+
+	return user
+}
+
 export {
 	registerUser,
 	authenticateUser,
 	confirmUserAccount,
 	sendEmailToResetPassword,
 	validateTokenToResetPassword,
-	updatePassword
+	updatePassword,
+	findUserByEmail
 }
