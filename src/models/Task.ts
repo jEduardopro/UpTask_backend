@@ -1,4 +1,4 @@
-import mongoose from 'mongoose'
+import mongoose, { mongo } from 'mongoose'
 
 const TaskSchema = new mongoose.Schema({
 	name: {
@@ -28,6 +28,10 @@ const TaskSchema = new mongoose.Schema({
 	project: {
 		type: mongoose.Schema.Types.ObjectId,
 		ref: 'Project'
+	},
+	completed: {
+		type: mongoose.Schema.Types.ObjectId,
+		ref: 'User'
 	}
 }, {
 	versionKey: false,

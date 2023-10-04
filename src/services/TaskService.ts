@@ -3,6 +3,7 @@ import Task from "../models/Task"
 import { AuthReq, Project } from "../types"
 import { ProjectNotFound, TaskNotFound } from "../errors"
 import isValidId from "../utils/validateId"
+import { Types } from "mongoose"
 
 const createTask = async (req: AuthReq) => {
 	const { project } = req.body
@@ -75,7 +76,9 @@ const destroyTask = async (req: AuthReq) => {
 const updateTaskStatus = async (req: AuthReq) => {
 	const task = await findTask(req)
 	task.status = !task.status
+	task.completed = new Types.ObjectId(req.user.id)
 	await task.save()
+	await task.populate('completed', 'name email')
 	return task
 }
 

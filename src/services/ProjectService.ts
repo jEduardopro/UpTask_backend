@@ -42,7 +42,13 @@ const projectExist = async (req: AuthReq) => {
 
 const findProject = async (req: AuthReq) => {
 	const project = await projectExist(req)
-	await project.populate('tasks')
+	await project.populate({
+		path: 'tasks',
+		populate: {
+			path: 'completed',
+			select: 'name email'
+		}
+	})
 	await project.populate('collaborators', 'name email')
 	return project
 }
