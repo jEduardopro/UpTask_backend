@@ -13,6 +13,11 @@ app.use(express.json())
 app.use(cors())
 
 const server = http.createServer(app)
+const io = new Server(server, {
+	cors: {
+		origin: '*',
+	},
+})
 
 const main = async () => {
 	try {
@@ -28,12 +33,6 @@ const main = async () => {
 		})
 
 		server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
-
-		const io = new Server(server, {
-			cors: {
-				origin: '*',
-			},
-		})
 
 		io.on('connection', socket)
 
