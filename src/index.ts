@@ -1,13 +1,18 @@
 import express, { NextFunction, Request, Response } from 'express'
 import 'dotenv/config'
 import cors from 'cors'
+import {Server} from 'socket.io'
+import http from 'http'
 import connectDB from './config/db'
 import routes from './routes'
+import socket from './socket'
 
 const PORT = process.env.PORT || 4000
 const app = express()
 app.use(express.json())
 app.use(cors())
+
+const server = http.createServer(app)
 
 const main = async () => {
 	try {
@@ -22,7 +27,15 @@ const main = async () => {
 			next(error)
 		})
 
-		app.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
+		server.listen(PORT, () => console.log(`Server running on port http://localhost:${PORT}`))
+
+		const io = new Server(server, {
+			cors: {
+				origin: '*',
+			},
+		})
+
+		io.on('connection', socket)
 
 	} catch (error) {
 		console.log('Server Error: ', error);
